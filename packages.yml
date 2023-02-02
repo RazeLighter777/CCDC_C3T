@@ -1,31 +1,22 @@
-- hosts: ubuntu
-  - name: Install required packages for Ubuntu/debian hosts
-    apt:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - vim
-      - htop
-      - screen
-      - git
-      - python3-pip
-      - python3
-      - fail2ban
-      - nano
-      - curl
-      - firejail
-- hosts: centos
-  - name: Install required packages for CentOS hosts
-    yum:
-      name: "{{ item }}"
-      state: present
-    with_items:
-      - vim
-      - htop
-      - screen
-      - git
-      - python3-pip
-      - python3
-      - fail2ban
-      - nano
-      - curl
+- name: ubuntu-packages
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: Install list of packages on ubuntu
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - vim
+        - htop
+        - screen
+        - fail2ban
+        - firejail
+        - python3
+        - python3-pip
+        - ufw
+        - net-tools
+
+        
+
+
