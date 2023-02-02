@@ -16,7 +16,24 @@
         - python3-pip
         - ufw
         - net-tools
-
+- name: centos-packages
+  hosts: centos
+  become: true
+  tasks:
+    - name: Install list of packages on centos
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - epel-release
+        - vim
+        - htop
+        - screen
+        - fail2ban
+        - python3
+        - python3-pip
+        - ufw
+        - net-tools
         
 
 
