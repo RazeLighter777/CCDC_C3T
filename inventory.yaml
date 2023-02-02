@@ -1,0 +1,11 @@
+blue_team:
+  hosts:
+    ubuntu:
+      ccdc1:
+        ansible_host: 10.13.0.11
+      ccdc2:
+        ansible_host: 10.13.0.13
+    centos: 
+      wazuh:
+        ansible_host: 10.13.0.14
+
