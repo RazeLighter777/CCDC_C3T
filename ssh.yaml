@@ -1,0 +1,33 @@
+- name: Disable root login
+  hosts: all
+  become: true
+  tasks:
+    - name: Disable root login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PermitRootLogin'
+        line: 'PermitRootLogin no'
+        state: present
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
+- name: Install the C3T backup key
+  hosts: all
+  become: true
+  tasks:
+    - name: copy public key to system
+      copy:
+        src: "{{ backup_key_path }}"
+        dest: /root/c3tbackup.pub
+        mode: 0600
+    - name: Add AuthorizedKeysFile entry
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^AuthorizedKeysFile'
+        line: 'AuthorizedKeysFile .ssh/authorized_keys /root/c3tbackup.pub'
+        state: present
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
