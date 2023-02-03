@@ -1,0 +1,17 @@
+- name: Enable SELinux on RHEL based hosts
+  hosts: centos
+  become: true
+  tasks:
+    - name: Enable SELinux
+      selinux:
+        state: enforcing
+        policy: targeted
+- name: Enable AppArmor service on Ubuntu based hosts
+  hosts: ubuntu
+  become: true
+  tasks:
+    - name: Enable AppArmor
+      service:
+        name: apparmor
+        state: started
+        enabled: yes

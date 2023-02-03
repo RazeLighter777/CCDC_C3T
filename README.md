@@ -30,4 +30,18 @@ ansible-playbook -i inventory.yaml <playbook name>
 - ssh.yml
     - [x] Configures SSH on the hosts to disallow root login.
     - [ ] Installs the C3T backup key on the hosts.
-    - [ ] Locks the authorized_keys file on the hosts.
+    - [x] Locks the authorized_keys file on the hosts with chattr +i.
+- auditd.yml
+    - [x] Installs auditd on the hosts.
+    - [x] Configures auditd on the hosts to log all events.
+    - [ ] Enables auditd on the hosts. (Doesn't work on RHEL hosts . . . )
+- mac.yml
+    - [x] Enabled SELinux on RHEL hosts.
+    - [x] Enables AppArmor on Ubuntu hosts.
+- fail2ban.yml
+    - [x] Installs fail2ban on the hosts.
+    - [x] Configures fail2ban on the hosts to ban hosts that fail to login 3 times.
+- sudo.yml
+    - [x] Changes default sudo timeout to 30s
+    - [x] Removes root password
+    - [x] Adds immutable flag to sudoers file

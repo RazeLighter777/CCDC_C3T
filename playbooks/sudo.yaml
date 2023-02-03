@@ -1,0 +1,33 @@
+- name: /etc/sudoers configuration
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  become_flags: -S -H -n
+  tasks:
+    - name: Increase sudo timeout to 30 seconds
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: 'Defaults    timestamp_timeout=30'
+        line: 'Defaults    timestamp_timeout=30'
+        state: present
+        validate: 'visudo -cf %s'
+  pre_tasks:
+    - name: Remove immutable flag from /etc/sudoers
+      shell: chattr -i /etc/sudoers
+  post_tasks:
+    - name: Add immutable flag to /etc/sudoers
+      shell: chattr +i /etc/sudoers
+- name: Disable root login by running `passwd -l root` in shell
+  hosts: all
+  become: yes
+  become_method: sudo
+  become_user: root
+  become_flags: -S -H -n
+  tasks:
+    - name: Disable root login by running `passwd -l root` in shell
+      shell: passwd -l root
+      args:
+        executable: /bin/bash
+
+
