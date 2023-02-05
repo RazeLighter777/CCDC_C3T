@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Playbooks fetch artifacts
+playbooks/fetch

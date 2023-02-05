@@ -21,16 +21,28 @@
         owner: root
         group: root
         mode: 0644
-    - name: Restart sshd
-      service:
-        name: sshd
-        state: restarted
+    - name: Disable PasswordAuthentication
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        state: present
+    - name: Add AuthenticaMethods publickey to sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^AuthenticationMethods'
+        line: 'AuthenticationMethods publickey'
+        state: present
   pre_tasks:
     - name: Remove immutable flag from /etc/ssh/sshd_config
       shell: chattr -i /etc/ssh/sshd_config
   post_tasks:
     - name: Add immutable flag to /etc/ssh/sshd_config
       shell: chattr +i /etc/ssh/sshd_config
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
 - name: Mark all authorized_keys as read-only
   hosts: all
   become: true

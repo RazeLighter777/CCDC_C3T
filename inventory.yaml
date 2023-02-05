@@ -29,5 +29,7 @@ all:
       hosts:
         ccdc1:
         ccdc2:
-
+    # Add hosts that require a password to login for scoring checks    
+    requires_password_ssh:
+      hosts:
 

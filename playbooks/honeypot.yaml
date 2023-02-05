@@ -1,21 +1,20 @@
-- name: Install and enable telpot service
+- name: Enable pip honeypot
   hosts: honeypots
   become: true
-  become_method: sudo
-  become_user: root
-  tasks:
-    - name: Install telpot.py
-      copy:
-        src: scripts/telpot.py
-        dest: /opt/telpot.py
-        mode: 0755
-    - name: Install telpot.service
-      copy:
-        src: services/telpot.service
-        dest: /etc/systemd/system/telpot.service
-        mode: 0644
-    - name: restart telpot.service
-      systemd:
-        name: telpot.service
-        enabled: yes
-        state: restarted
+  pre_tasks:
+    - name: Install pip on honeypots (apt)
+      apt:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == "Debian"
+    - name: Install pip on honeypots (yum)
+      yum:
+        name: python3-pip
+        state: present
+      when: ansible_os_family == "RedHat"
+    - name: Install honeypots package on pip 
+      pip:
+        name: honeypots
+        state: present
+
+      
