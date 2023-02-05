@@ -1,0 +1,40 @@
+- name: Ensure /tmp is mounted with noexec
+  hosts: all
+  become: true
+  tasks:
+    - name: Ensure /tmp is mounted with noexec
+      mount:
+        name: /tmp
+        src: /tmp
+        fstype: tmpfs
+        opts: defaults,noexec,nosuid,nodev
+        state: mounted
+        dump: 0
+        passno: 0
+    - name: Ensure /var/tmp is mounted with noexec
+      mount:
+        name: /var/tmp
+        src: /var/tmp
+        fstype: tmpfs
+        opts: defaults,noexec,nosuid,nodev
+        state: mounted
+        dump: 0
+        passno: 0
+    - name: Ensure /dev/shm is mounted with noexec
+      mount:
+        name: /dev/shm
+        src: /dev/shm
+        fstype: tmpfs
+        opts: defaults,noexec,nosuid,nodev
+        state: mounted
+        dump: 0
+        passno: 0
+    - name: Ensure /run/shm is mounted with noexec
+      mount:
+        name: /run/shm
+        src: /run/shm
+        fstype: tmpfs
+        opts: defaults,noexec,nosuid,nodev
+        state: mounted
+        dump: 0
+        passno: 0

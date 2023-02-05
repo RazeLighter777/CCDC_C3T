@@ -12,4 +12,22 @@ all:
       hosts:
         wazuh:
           ansible_host: wazuh
+    web_servers:
+      hosts:
+        ccdc1:
+        ccdc2:
+    wazuh_servers:
+      hosts:
+        wazuh:
+    jenkins_servers:
+      hosts:
+    docker_swarm_servers:
+      hosts:
+        ccdc1: 
+        ccdc2:
+    honeypots:
+      hosts:
+        ccdc1:
+        ccdc2:
+
 

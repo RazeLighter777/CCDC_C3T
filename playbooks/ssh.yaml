@@ -8,6 +8,19 @@
         regexp: '^PermitRootLogin'
         line: 'PermitRootLogin no'
         state: present
+    - name: Add ssh warning banner
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Banner'
+        line: 'Banner /etc/issue.net'
+        state: present
+    - name: Copy warning banner to host
+      copy:
+        src: ssh/issue.net
+        dest: /etc/issue.net
+        owner: root
+        group: root
+        mode: 0644
     - name: Restart sshd
       service:
         name: sshd

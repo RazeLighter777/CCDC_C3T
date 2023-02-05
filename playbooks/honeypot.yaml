@@ -1,0 +1,21 @@
+- name: Install and enable telpot service
+  hosts: honeypots
+  become: true
+  become_method: sudo
+  become_user: root
+  tasks:
+    - name: Install telpot.py
+      copy:
+        src: scripts/telpot.py
+        dest: /opt/telpot.py
+        mode: 0755
+    - name: Install telpot.service
+      copy:
+        src: services/telpot.service
+        dest: /etc/systemd/system/telpot.service
+        mode: 0644
+    - name: restart telpot.service
+      systemd:
+        name: telpot.service
+        enabled: yes
+        state: restarted

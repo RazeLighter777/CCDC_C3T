@@ -1,0 +1,87 @@
+- name: Configure the firewall
+  hosts: all
+  become: true
+  tasks: 
+    - name: Enable ssh on firewall
+      ufw:
+        rule: allow
+        port: ssh
+        proto: tcp
+        state: enabled
+    - name: Enable http/https on web_servers
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+        state: enabled
+      when: "'web_servers' in group_names"
+      with_items:
+        - 80
+        - 443
+    - name: Enable port 8080/50000 on jenkins_servers
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+        state: enabled
+      with_items:
+        - 8080
+        - 50000
+      when: "'jenkins_servers' in group_names"
+    - name: Enable port 1514-16, port 514,55000,9200,and 9300:9400, and 443 on wazuh_servers
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: any
+        state: enabled
+      with_items:
+        - 1514
+        - 1515
+        - 1516
+        - 514
+        - 55000
+        - 9200
+        - 9300:9400
+        - 443
+      when: "'wazuh_servers' in group_names"
+    - name: Enable port 2377, 7946, 4789 on docker_swarm_servers
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: any
+        state: enabled
+      with_items:
+        - 2377
+        - 7946
+        - 4789
+      when: "'docker_swarm_servers' in group_names"
+  pre_tasks:
+    - name: Install ufw (apt)
+      apt:
+        name: ufw
+        state: present
+      when: ansible_os_family == "Debian"
+    - name: Install ufw (yum)
+      yum:
+        name: ufw
+        state: present
+      when: ansible_os_family == "RedHat"
+    - name: Disable firewalld if it is installed
+      service:
+        name: firewalld
+        state: stopped
+        enabled: no
+      when: ansible_os_family == "RedHat"
+    - name: Uninstall firewalld
+      yum:
+        name: firewalld
+        state: absent
+      when: ansible_os_family == "RedHat"
+  post_tasks:
+    - name: reload ufw
+      ufw:
+        state: reloaded
+    - name: enable ufw
+      ufw:
+        state: enabled
+    

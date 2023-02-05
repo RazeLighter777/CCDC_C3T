@@ -17,7 +17,11 @@ Host <hostname (must match inventory.yml)>
     User <username>
     IdentityFile <path to private key  (Eg. ~/.ssh/practice_key)>
 ```
-2. Edit the `group_vars/all.yml` file to include the appropriate values for the variables. See the comments in the file for more information.
+2. Edit the files in inventory.yaml, playbooks/ and playbooks/files to include the correct information. **This is important because some of the playbooks could break the systems or scoring checks if the information is incorrect!**
+
+    - Check fail2ban jail.local and make sure ignoreip is set to the correct subnets for scoring checker and LAN!.
+    - Check firewall.yml and make sure the correct ports are selected for any services running on docker swarm.
+    - Make sure the hosts are under the correct group in inventory.yaml to prevent misconfiguration.
 
 3. To run an invividual playbook, run the following command:
 ```
@@ -30,6 +34,7 @@ ansible-playbook -i inventory.yaml <playbook name>
 - ssh.yml
     - [x] Configures SSH on the hosts to disallow root login.
     - [ ] Installs the C3T backup key on the hosts.
+    - [x] Installs the C3T custom banner on the hosts.
     - [x] Locks the authorized_keys file on the hosts with chattr +i.
 - auditd.yml
     - [x] Installs auditd on the hosts.
@@ -45,3 +50,8 @@ ansible-playbook -i inventory.yaml <playbook name>
     - [x] Changes default sudo timeout to 30s
     - [x] Removes root password
     - [x] Adds immutable flag to sudoers file
+- firewall.yml
+    - [x] Installs ufw on all hosts.
+    - [x] Disables firewalld on RHEL hosts.
+    - [x] Configures ufw on all hosts to allow SSH.
+    - [x] Enables group-based firewall rules on all hosts.
