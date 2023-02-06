@@ -21,8 +21,8 @@ all:
     windows:
       hosts:
         user1:
-         ansible_host: 10.13.0.7
-         ansible_user: User1
+         ansible_host: <redacted>
+         ansible_user: <redacted>
          ansible_password: <redacted>
          ansible_connection: winrm
          ansible_winrm_transport: credssp
