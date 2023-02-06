@@ -1,6 +1,7 @@
 all:
   vars:
     backup_key_path: ~/.ssh/c3tbackup.pub
+    dns_server: 1.1.1.1
   children:
     ubuntu:
       hosts:
@@ -25,11 +26,16 @@ all:
       hosts:
         ccdc1: 
         ccdc2:
+      children:
+        docker_swarm_managers:
+          hosts:
+            ccdc1:
+        docker_swarm_workers:
+          hosts:
+            ccdc1:
+            ccdc2:
     honeypots:
       hosts:
         ccdc1:
         ccdc2:
-    # Add hosts that require a password to login for scoring checks    
-    requires_password_ssh:
-      hosts:
 

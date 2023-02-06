@@ -130,3 +130,5 @@ dmypy.json
 
 # Playbooks fetch artifacts
 playbooks/fetch
+# Secrets like private keys, passwords
+playbooks/files/secrets

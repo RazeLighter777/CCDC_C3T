@@ -50,8 +50,18 @@ ansible-playbook -i inventory.yaml <playbook name>
     - [x] Changes default sudo timeout to 30s
     - [x] Removes root password
     - [x] Adds immutable flag to sudoers file
+    - [x] Sets passwordless sudo for the ansible user
+    - [x] Sets password for ansible user and root and removes passwords from all other users
+    - [x] Marks /etc/shadow as immutable, preventing password changes
+- compliance.yml
+    - [x] Does a bunch of CIS compliance check fixes on the hosts just to decrease noise on wazuh.
+    - [x] Runs an audit script and fetches the results to playbooks/fetch  
+- network.yml
+    - [x] Configures the hosts to use the C3T DNS servers specified in the inventory.yaml
+- honeypot.yml
+    - [x] Installs and configures the honeypot on the hosts.
 - firewall.yml
     - [x] Installs ufw on all hosts.
     - [x] Disables firewalld on RHEL hosts.
     - [x] Configures ufw on all hosts to allow SSH.
-    - [x] Enables group-based firewall rules on all hosts.
+    - [x] Enables group-based firewall rules on all hosts. Relies on the group names in inventory.yaml.
