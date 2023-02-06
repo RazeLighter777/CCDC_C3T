@@ -1,0 +1,65 @@
+- name: Set variable ansible_ssh_id to current user
+  hosts: all
+  become: false
+  tasks:
+    - name: Set variable ansible_ssh_id to current user
+      set_fact:
+        ansible_ssh_id: "{{ ansible_user_id }}"
+- name: /etc/sudoers configuration
+  hosts: all
+  become: true
+  become_method: sudo
+  become_flags: -S -H -n
+  tasks:
+    - name: Increase sudo timeout to 30 seconds
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: 'Defaults    timestamp_timeout=30'
+        line: 'Defaults    timestamp_timeout=30'
+        state: present
+        validate: 'visudo -cf %s'
+    - name: Make sure passwordless sudo is enabled for ansible_ssh_id
+      lineinfile:
+        dest: /etc/sudoers
+        regexp: '^ALL=(ALL) NOPASSWD: ALL'
+        line: '{{ ansible_ssh_id }} ALL=(ALL) NOPASSWD: ALL'
+        state: present
+        validate: 'visudo -cf %s'
+  pre_tasks:
+    - name: Remove immutable flag from /etc/sudoers
+      shell: chattr -i /etc/sudoers
+  post_tasks:
+    - name: Add immutable flag to /etc/sudoers
+      shell: chattr +i /etc/sudoers
+- name: Make sure only root has a password. This password should be written down and kept safe.
+  hosts: all
+  become: false
+  become_flags: -S -H -n
+  vars_prompt:
+    - name: Password
+      prompt: Enter the root password for the host (WRITE IT DOWN!!!!! DONT MISSPELL IT!!!!)
+  tasks:
+    - name: Remove password from all users
+      become: true
+      shell: 
+        cmd: "awk -F: '{print $1}' /etc/passwd | xargs -I {} passwd -d {}"
+    - name: Set password for root user
+      become: true
+      user:
+        name: root
+        password: "{{ Password | password_hash('sha512')}}"
+        update_password: always
+    - name: Set password for ansible user
+      become: true
+      user:
+        name: "{{ ansible_ssh_id }}"
+        password: "{{ Password | password_hash('sha512')}}"
+        update_password: always
+  pre_tasks:
+    - name: Remove immutable flag from /etc/shadow
+      become: true
+      shell: chattr -i /etc/shadow
+  post_tasks:
+    - name: Add immutable flag to /etc/shadow
+      become: true
+      shell: chattr +i /etc/shadow

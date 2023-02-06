@@ -1,0 +1,12 @@
+- name: Run the system information audit
+  hosts: all
+  become: true
+  tasks:
+    - name: Run audit.sh as root and output to /tmp/audit.log
+      become: true
+      shell: ~/audit.sh > /tmp/audit.log
+    - name: fetch audit.log
+      fetch:
+        src: /tmp/audit.log
+        dest: ./fetch/{{ ansible_host }}_{{ ansible_date_time.iso8601 }}_audit.log
+        flat: yes

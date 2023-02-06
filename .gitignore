@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Playbooks fetch artifacts
+playbooks/fetch
+# Secrets like private keys, passwords
+playbooks/files/secrets

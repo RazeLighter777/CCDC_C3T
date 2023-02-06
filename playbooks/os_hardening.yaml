@@ -1,0 +1,28 @@
+- hosts: all, !docker_swarm_servers, !routers
+  become: true
+  become_user: root
+  collections:
+    - devsec.hardening
+  roles:
+    - os_hardening
+  vars:
+    # We set our firewall rules in the firwall.
+    ufw_manage_defaults: false
+    os_user_pw_ageing: false
+  pre_tasks:
+    - name: Unlock /etc/shadow
+      shell: chattr -i /etc/shadow
+- hosts: docker_swarm_servers
+  become: true
+  collections:
+    - devsec.hardening
+  roles:
+    - os_hardening
+  vars:
+    sysctl_overwrite:
+      net.ipv4.ip_forward: 1
+    ufw_manage_defaults: false
+    os_user_pw_ageing: false
+  pre_tasks:
+    - name: Unlock /etc/shadow
+      shell: chattr -i /etc/shadow
