@@ -246,7 +246,7 @@ if (-Not $myWindowsPrincipal.IsInRole($adminRole)) {
    
    # Specify the current script path and name as a parameter
    # Default parameters of -Verbose and -DisableBasicAuth (disables http WinRM)
-   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath -Verbose -DisableBasicAuth "
+   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath -Verbose -DisableBasicAuth -EnableCredSSP"
    
    # Indicate that the process should be elevated
    $newProcess.Verb = "runas"
