@@ -41,8 +41,14 @@
         - 514
         - 55000
         - 9200
-        - 9300:9400
         - 443
+      when: "'wazuh_servers' in group_names"
+    - name: Open tcp 9300-9400 on wazuh_servers
+      ufw:
+        rule: allow
+        port: "9300:9400"
+        proto: tcp
+        state: enabled
       when: "'wazuh_servers' in group_names"
     - name: Enable port 2377, 7946, 4789 on docker_swarm_servers
       ufw:
@@ -65,12 +71,6 @@
       yum:
         name: ufw
         state: present
-      when: ansible_os_family == "RedHat"
-    - name: Disable firewalld if it is installed
-      service:
-        name: firewalld
-        state: stopped
-        enabled: no
       when: ansible_os_family == "RedHat"
     - name: Uninstall firewalld
       yum:

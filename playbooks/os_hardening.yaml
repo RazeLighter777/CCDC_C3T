@@ -9,6 +9,8 @@
     # We set our firewall rules in the firwall.
     ufw_manage_defaults: false
     os_user_pw_ageing: false
+    os_auth_lockout_time: false
+    os_auth_retries: 9999
   pre_tasks:
     - name: Unlock /etc/shadow
       shell: chattr -i /etc/shadow
@@ -23,6 +25,8 @@
       net.ipv4.ip_forward: 1
     ufw_manage_defaults: false
     os_user_pw_ageing: false
+    os_auth_lockout_time: false
+    os_auth_retries: 9999
   pre_tasks:
     - name: Unlock /etc/shadow
       shell: chattr -i /etc/shadow
