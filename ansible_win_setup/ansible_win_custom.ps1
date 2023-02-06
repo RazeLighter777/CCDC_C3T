@@ -244,7 +244,7 @@ if (-Not $myWindowsPrincipal.IsInRole($adminRole)) {
     $newProcess = new-object System.Diagnostics.ProcessStartInfo "PowerShell"
    
    # Specify the current script path and name as a parameter
-   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath "
+   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath -Verbose -DisableBasicAuth "
    
    # Indicate that the process should be elevated
    $newProcess.Verb = "runas"
@@ -253,7 +253,7 @@ if (-Not $myWindowsPrincipal.IsInRole($adminRole)) {
    [System.Diagnostics.Process]::Start($newProcess)
    
    # Exit from the current, unelevated, process
-   exit
+   Exit 2
 }
 
 $EventSource = $MyInvocation.MyCommand.Name
@@ -443,3 +443,5 @@ Else {
     Throw "Unable to establish an HTTP or HTTPS remoting session."
 }
 Write-VerboseLog "PS Remoting has been successfully configured for Ansible."
+
+Pause
