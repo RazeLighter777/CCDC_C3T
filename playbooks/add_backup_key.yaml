@@ -1,22 +1,27 @@
+- name: Set variable ansible_user to current user
+  hosts: all
+  become: false
+  tasks:
+    - name: Set variable ansible_user to current user
+      set_fact:
+        ansible_user: "{{ ansible_user_id }}"
 - name: Add backup key to authorized_keys
   hosts: all
   become: true
   tasks:
-    - name: Run shell command to add immutable flag to all .ssh directories
-      shell: chattr -i /home/*/.ssh
-    - name: Run shell command to add immutable flag to all authorized_keys
-      shell: chattr -i /home/*/.ssh/authorized_keys
-  tasks:
+    - name: Run shell command to remove immutable flag to all .ssh directories
+      shell: chattr -i /home/{{ ansible_user }}/.ssh
+    - name: Run shell command to remove immutable flag to all authorized_keys
+      shell: chattr -i /home/{{ ansible_user }}/.ssh/authorized_keys
     - name: Copy backup key to host
       copy:
         src: files/ssh/backup_key.pub
-        dest: /home/*/.ssh/backup_key.pub
+        dest: /home/{{ ansible_user }}/.ssh/backup_key.pub
         owner: root
         group: root
-        mode: 0600
-
-
-  tasks:
+        mode: 0644
+    - name: Run shell command to add backup key to authorized_keys
+      shell: cat /home/{{ ansible_user }}/.ssh/backup_key.pub >> /home/{{ ansible_user }}/.ssh/authorized_keys
     - name: Run shell command to add immutable flag to all .ssh directories
       shell: chattr +i /home/*/.ssh
     - name: Run shell command to add immutable flag to all authorized_keys
