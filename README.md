@@ -36,10 +36,6 @@ ansible-playbook -i inventory.yaml <playbook name>
     - [ ] Installs the C3T backup key on the hosts.
     - [x] Installs the C3T custom banner on the hosts.
     - [x] Locks the authorized_keys file on the hosts with chattr +i.
-- auditd.yml
-    - [x] Installs auditd on the hosts.
-    - [x] Configures auditd on the hosts to log all events.
-    - [ ] Enables auditd on the hosts. (Doesn't work on RHEL hosts . . . )
 - mac.yml
     - [x] Enabled SELinux on RHEL hosts.
     - [x] Enables AppArmor on Ubuntu hosts.
@@ -53,15 +49,27 @@ ansible-playbook -i inventory.yaml <playbook name>
     - [x] Sets passwordless sudo for the ansible user
     - [x] Sets password for ansible user and root and removes passwords from all other users
     - [x] Marks /etc/shadow as immutable, preventing password changes
-- compliance.yml
-    - [x] Does a bunch of CIS compliance check fixes on the hosts just to decrease noise on wazuh.
+- audit.yml
     - [x] Runs an audit script and fetches the results to playbooks/fetch  
 - network.yml
     - [x] Configures the hosts to use the C3T DNS servers specified in the inventory.yaml
 - honeypot.yml
-    - [x] Installs and configures the honeypot on the hosts.
+    - [ ] Installs and configures the honeypot on the hosts.
 - firewall.yml
     - [x] Installs ufw on all hosts.
     - [x] Disables firewalld on RHEL hosts.
     - [x] Configures ufw on all hosts to allow SSH.
     - [x] Enables group-based firewall rules on all hosts. Relies on the group names in inventory.yaml.
+- os_hardening.yml
+    - [x] Runs scripts to harden the hosts from github.com/dev-sec/ansible-os-hardening
+# Suggested run order
+1. audit.yml
+2. network.yml
+3. os_hardening.yml
+4. packages.yml
+5. ssh.yml
+6. mac.yml
+7. fail2ban.yml
+8. sudo.yml
+9. honeypot.yml
+9. firewall.yml

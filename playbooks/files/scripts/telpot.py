@@ -1,3 +1,4 @@
+# TODO: Rewrite so it works with actual telnet client
 import socket
 import threading
 import time

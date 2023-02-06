@@ -1,0 +1,35 @@
+- name: Set the DNS server by modifying /etc/resolv.conf, and disabling systemd-resolved
+  become: true
+  hosts: all
+  tasks:
+    - name: Disable systemd-resolved on ubuntu
+      systemd:
+        name: systemd-resolved
+        state: stopped
+        enabled: no
+      when: ansible_os_family == "Debian"
+    - name: Set DNS server
+      lineinfile:
+        path: /etc/resolv.conf
+        regexp: '^nameserver'
+        line: 'nameserver {{ dns_server }}'
+    - name: Add warning banner to /etc/resolv.conf
+      lineinfile:
+        path: /etc/resolv.conf
+        regexp: '^#'
+        line: '# This file is managed by CCDC_C3T. Do not edit.'
+        state: present
+  pre_tasks:
+    - name: Remove /etc/resolv.conf
+      file:
+        path: /etc/resolv.conf
+        state: absent
+    - name: Create /etc/resolv.conf
+      file:
+        path: /etc/resolv.conf
+        state: touch
+    - name: Mark /etc/resolv.conf as mutable
+      shell: chattr -i /etc/resolv.conf
+  post_tasks:
+    - name: Mark /etc/resolv.conf as immutable
+      shell: chattr +i /etc/resolv.conf

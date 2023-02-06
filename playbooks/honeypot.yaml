@@ -1,20 +1,3 @@
-- name: Enable pip honeypot
-  hosts: honeypots
-  become: true
-  pre_tasks:
-    - name: Install pip on honeypots (apt)
-      apt:
-        name: python3-pip
-        state: present
-      when: ansible_os_family == "Debian"
-    - name: Install pip on honeypots (yum)
-      yum:
-        name: python3-pip
-        state: present
-      when: ansible_os_family == "RedHat"
-    - name: Install honeypots package on pip 
-      pip:
-        name: honeypots
-        state: present
+# TODO: add honeypot installation and service
 
       

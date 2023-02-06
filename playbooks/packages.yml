@@ -4,7 +4,7 @@
   tasks:
     - name: Install list of packages on ubuntu
       apt:
-        name: ["vim", "htop", "screen", "firejail", "python3", "python3-pip", "net-tools"]
+        name: ["vim", "htop", "screen", "firejail", "python3", "python3-pip", "net-tools", "bash-completion"]
         state: present
 - name: centos-packages
   hosts: centos
@@ -12,13 +12,17 @@
   tasks:
     - name: Install list of packages on centos
       yum:
-        name: ["vim", "htop", "screen", "python3", "python3-pip", "net-tools"]
+        name: ["vim", "htop", "screen", "python3", "python3-pip", "net-tools","bash-completion"]
         state: present
   pre_tasks:
     - name: Install epel-release
       yum:
         name: epel-release
         state: present
+    - name: yum update
+      yum:
+        name: "*"
+        state: latest
 - name: Update all packages
   hosts: all
   become: true
