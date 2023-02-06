@@ -241,10 +241,12 @@ $adminRole = [System.Security.Principal.WindowsBuiltInRole]::Administrator
 
 # Check to see if we are currently running "as Administrator"
 if (-Not $myWindowsPrincipal.IsInRole($adminRole)) {
+   # Start new PowerShell process while prompting for Administrator
     $newProcess = new-object System.Diagnostics.ProcessStartInfo "PowerShell"
    
    # Specify the current script path and name as a parameter
-   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath -Verbose -DisableBasicAuth "
+   # Default parameters of -Verbose and -DisableBasicAuth (disables http WinRM)
+   $newProcess.Arguments = "-ExecutionPolicy ByPass $PSCommandPath -Verbose -DisableBasicAuth -EnableCredSSP"
    
    # Indicate that the process should be elevated
    $newProcess.Verb = "runas"

@@ -1,0 +1,5 @@
+- name: bruh
+  hosts: windows
+  tasks: 
+  - name: example
+    win_ping:

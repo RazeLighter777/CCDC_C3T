@@ -17,6 +17,16 @@ all:
       hosts:
         wazuh:
           ansible_host: wazuh
+    #windows hosts
+    windows:
+      hosts:
+        user1:
+         ansible_host: <redacted>
+         ansible_user: <redacted>
+         ansible_password: <redacted>
+         ansible_connection: winrm
+         ansible_winrm_transport: credssp
+         ansible_winrm_server_cert_validation: ignore
     # any servers that need port 80/443 open
     web_servers:
       hosts:
