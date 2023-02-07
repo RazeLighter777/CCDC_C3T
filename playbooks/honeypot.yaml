@@ -1,7 +1,7 @@
 # TODO: add honeypot installation and service
 
 - name: Install endlessh tarpit
-  hosts: all
+  hosts: honeypot_servers
   become: true
   tasks:
     - name: Install endlessh
@@ -14,27 +14,23 @@
         name: endlessh
         state: present
       when: ansible_os_family == "RedHat"
-    - name: Clone fail2ban-endlessh repo
-      ansible.builtin.git:
-        repo: 'https://github.com/itskenny0/fail2ban-endlessh.git'
-        dest: /home/f2b-endlessh
-        clone: yes
-        update: yes
-    - name: Copy fail2ban action.d
-      copy:
-        src: /home/f2b-endlessh/action.d/endlessh.conf
-        dest: /etc/fail2ban/action.d/endlessh.conf
-        owner: root
-        group: root
-        # mode: 0644
-    - name: Copy fail2ban jail.d
-      copy:
-        src: /home/f2b-endlessh/jail.d/endlessh.conf
-        dest: /etc/fail2ban/jail.d/endlessh.conf
-        owner: root
-        group: root
-        # mode: 0644
-    - name: Restart fail2ban
-      service:
-        name: fail2ban
+    - name: Disable endlessh
+      systemd:
+        name: endlessh
+        enabled: no
+        state: stopped
+    - name: Kill endlessh
+      shell: if pgrep endlessh; then pkill endlessh; fi
+    - name: Run endlessh in background
+      shell: endlessh -d 1000 -p 2222 -v >> /var/log/endlessh.log 2>&1 &
+    - name: Add endlessh /var/log/endlessh.log to /etc/audit/rules.d/endless.rules
+      lineinfile:
+        create: yes
+        path: /etc/audit/rules.d/endless.rules
+        line: '-w /var/log/endlessh.log -p wa -k endlessh'
+    - name: Restart auditd
+      systemd:
+        name: auditd
         state: restarted
+
+    

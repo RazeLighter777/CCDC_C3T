@@ -2,9 +2,14 @@
   hosts: all
   become: true
   tasks:
+    - name: Copy audit.sh to remote host
+      copy:
+        src: scripts/audit.sh
+        dest: ~/audit.sh
+        mode: 0755
     - name: Run audit.sh as root and output to /tmp/audit.log
       become: true
-      shell: ~/audit.sh > /tmp/audit.log
+      shell: ~/audit.sh > /tmp/audit.log || true
     - name: fetch audit.log
       fetch:
         src: /tmp/audit.log

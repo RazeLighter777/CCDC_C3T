@@ -55,7 +55,7 @@ all:
             ccdc1:
             ccdc2:
     # any servers that are honeypots
-    honeypots:
+    honeypot_servers:
       hosts:
         ccdc1:
         ccdc2:
