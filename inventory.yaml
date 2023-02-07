@@ -1,10 +1,14 @@
 all:
   vars:
     backup_key_path: ~/.ssh/c3tbackup.pub
-
+    wazuh_manager_ip: 10.13.0.14
     # Set the DNS server to use for all hosts
     dns_server: 1.1.1.1
   children:
+    wazuh_hosts:
+      hosts:
+        ccdc1:
+        ccdc2:
     #ubuntu/debian hosts
     ubuntu:
       hosts:
