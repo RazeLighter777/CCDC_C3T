@@ -37,7 +37,7 @@ def runFTPServer() -> None:
   # Define a customized banner (string returned when client connects)
   handler.banner = "pyftpdlib based ftpd ready."
   
-  logging.basicConfig(filename='ftppot.log', level=logging.INFO)
+  logging.basicConfig(filename='/var/log/ftppot.log', level=logging.INFO)
 
   server = FTPServer(('', PORT), handler)
 
