@@ -1,4 +1,4 @@
-- hosts: all, !docker_swarm_servers, !routers
+- hosts: linux, !docker_swarm_servers, !routers
   become: true
   become_user: root
   collections:

@@ -1,11 +1,12 @@
 - name: Set variable ansible_user to current user
-  hosts: all
+  hosts: linux
   become: false
   tasks:
     - name: Set variable ansible_user to current user
       set_fact:
         ansible_user: "{{ ansible_user_id }}"
 - name: Add backup key to authorized_keys
+  hosts: linux
   hosts: all
   vars_files: 
   - ~/vars.yaml

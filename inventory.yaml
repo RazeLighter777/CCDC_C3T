@@ -1,32 +1,20 @@
 all:
   vars:
     backup_key_path: ~/.ssh/c3tbackup.pub
-
+    wazuh_manager_ip: 10.13.0.14
     # Set the DNS server to use for all hosts
     dns_server: 1.1.1.1
   children:
-    #ubuntu/debian hosts
-    ubuntu:
+    linux:
       hosts:
         ccdc1:
-          ansible_host: ccdc1
         ccdc2:
-          ansible_host: ccdc2
-    #centos,rhel,rocky, amazon linux hosts.
-    centos: 
-      hosts:
         wazuh:
-          ansible_host: wazuh
-    #windows hosts
     windows:
+    wazuh_hosts:
       hosts:
-        user1:
-         ansible_host: <redacted>
-         ansible_user: <redacted>
-         ansible_password: <redacted>
-         ansible_connection: winrm
-         ansible_winrm_transport: credssp
-         ansible_winrm_server_cert_validation: ignore
+        ccdc1:
+        ccdc2:
     # any servers that need port 80/443 open
     web_servers:
       hosts:
@@ -55,7 +43,7 @@ all:
             ccdc1:
             ccdc2:
     # any servers that are honeypots
-    honeypots:
+    honeypot_servers:
       hosts:
         ccdc1:
         ccdc2:

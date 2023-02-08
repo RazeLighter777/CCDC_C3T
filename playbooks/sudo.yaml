@@ -1,12 +1,12 @@
 - name: Set variable ansible_ssh_id to current user
-  hosts: all
+  hosts: linux
   become: false
   tasks:
     - name: Set variable ansible_ssh_id to current user
       set_fact:
         ansible_ssh_id: "{{ ansible_user_id }}"
 - name: /etc/sudoers configuration
-  hosts: all
+  hosts: linux
   become: true
   become_method: sudo
   become_flags: -S -H -n
@@ -32,7 +32,7 @@
     - name: Add immutable flag to /etc/sudoers
       shell: chattr +i /etc/sudoers
 - name: Make sure only root has a password. This password should be written down and kept safe.
-  hosts: all
+  hosts: linux
   become: false
   become_flags: -S -H -n
   vars_prompt:

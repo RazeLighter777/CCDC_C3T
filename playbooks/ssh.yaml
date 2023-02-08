@@ -1,5 +1,5 @@
 - name: Disable root login
-  hosts: all
+  hosts: linux
   become: true
   tasks:
     - name: Disable root login

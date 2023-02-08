@@ -1,0 +1,23 @@
+- name: Deploy customized Wazuh config files
+  hosts: wazuh
+  become: true
+  tasks:
+    - name: Copy Wazuh configuration files
+      copy: 
+        src: wazuh/managerOssec.conf
+        dest: /var/ossec/etc/ossec.conf
+        owner: root 
+        group: root
+        mode: 0644
+    - name: Restart Wazuh Indexer
+      service:
+        name: wazuh-indexer
+        state: restarted
+    - name: Restart Wazuh Manager
+      service:
+        name: wazuh-manager
+        state: restarted
+    - name: Restart Wazuh Dashboard
+      service:
+        name: wazuh-dashboard
+        state: restarted

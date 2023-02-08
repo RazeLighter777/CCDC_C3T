@@ -1,7 +1,14 @@
 - name: Configure the firewall
-  hosts: all
+  hosts: linux
   become: true
   tasks: 
+    - name: Testing Port
+      ufw:
+        rule: allow
+        port: 4444
+        proto: tcp
+        state: enabled 
+      when: "'honeypot_servers' in group_names"
     - name: Enable ssh on firewall
       ufw:
         rule: allow
@@ -61,6 +68,13 @@
         - 7946
         - 4789
       when: "'docker_swarm_servers' in group_names"
+    - name: Enable port 2222 on honeypot_servers
+      ufw:
+        rule: allow
+        port: 2222
+        proto: tcp
+        state: enabled
+      when: "'honeypot_servers' in group_names"
   pre_tasks:
     - name: Install ufw (apt)
       apt:
@@ -84,4 +98,3 @@
     - name: enable ufw
       ufw:
         state: enabled
-    
