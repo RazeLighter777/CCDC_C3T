@@ -1,0 +1,30 @@
+- name: Remove backup key from authorized_keys
+  hosts: all
+  become: false
+  tasks:
+    - name: Set variable ansible_user to current user
+      set_fact:
+        ansible_user: "{{ ansible_user_id }}"
+- name: remove
+  hosts: all
+  vars_files: 
+  - ~/vars.yaml
+  become: true
+  tasks:
+    - name: Run shell command to check if backup key is in authorized_keys
+      shell: grep -q {{ backup_ssh_key }} /home/{{ ansible_user }}/.ssh/authorized_keys
+        # register the output of the command as backup_key
+        # grep -q returns 0 if it finds a match, 1 if it doesn't, and 2 if there is an error
+      register: key_exists
+      failed_when: key_exists.rc == 2
+    - block: 
+      - name: Run shell command to remove immutable flag to all .ssh directories
+        shell: chattr -i /home/{{ ansible_user }}/.ssh
+      - name: Run shell command to remove immutable flag to all authorized_keys
+        shell: chattr -i /home/{{ ansible_user }}/.ssh/authorized_keys
+
+      # remove backup key from authorized_keys
+      - name: Run shell command to remove backup key from authorized_keys
+        shell: grep -f {{ backup_ssh_key }} /home/{{ ansible_user }}/.ssh/authorized_keys > /home/{{ ansible_user }}/.ssh/authorized_keys
+        #shell: sed '/{{ backup_ssh_key }}/d' /home/{{ ansible_user }}/.ssh/authorized_keys
+      when: key_exists.rc == 0
