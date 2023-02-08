@@ -23,19 +23,22 @@
         shell: chattr -i /home/{{ ansible_user }}/.ssh
       - name: Run shell command to remove immutable flag to all authorized_keys
         shell: chattr -i /home/{{ ansible_user }}/.ssh/authorized_keys
-      - name: Copy backup key to host
-        copy:
-          src: files/ssh/backup_key.pub
-          dest: /home/{{ ansible_user }}/.ssh/backup_key.pub
-          owner: root
-          group: root
-          mode: 0644
-      - name: Run shell command to add backup key to authorized_keys
-        shell: cat /home/{{ ansible_user }}/.ssh/backup_key.pub >> /home/{{ ansible_user }}/.ssh/authorized_keys
+      #- name: Copy backup key to host
+       # copy:
+        #  src: files/ssh/backup_key.pub
+          # dest: /home/{{ ansible_user }}/.ssh/backup_key.pub
+          # owner: root
+          # group: root
+          # mode: 0644
+      # - name: Run shell command to add backup key to authorized_keys
+        # shell: cat /home/{{ ansible_user }}/.ssh/backup_key.pub >> /home/{{ ansible_user }}/.ssh/authorized_keys
+      - name: echo backup key to authorized_keys
+        shell: echo {{ backup_ssh_key }} >> /home/{{ ansible_user }}/.ssh/authorized_keys
       - name: Run shell command to add immutable flag to all .ssh directories
         shell: chattr +i /home/*/.ssh
       - name: Run shell command to add immutable flag to all authorized_keys
         shell: chattr +i /home/*/.ssh/authorized_keys
-      when: key_exists.rc == 1
+      when: key_exists.rc == 0
+
 
 

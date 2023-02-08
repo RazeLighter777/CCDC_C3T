@@ -22,7 +22,13 @@
         shell: chattr -i /home/{{ ansible_user }}/.ssh
       - name: Run shell command to remove immutable flag to all authorized_keys
         shell: chattr -i /home/{{ ansible_user }}/.ssh/authorized_keys
-
+      - name: Copy remove_backup_key.py to remote host
+          copy:
+            src: scripts/remove_backup_key.py
+            dest: ~/remove_backup_key.py
+            mode: 0755
+      - name: run python script
+        shell: python3 ~/remove_backup_key.py
       # remove backup key from authorized_keys
       - name: Run shell command to remove backup key from authorized_keys
         shell: grep -f {{ backup_ssh_key }} /home/{{ ansible_user }}/.ssh/authorized_keys > /home/{{ ansible_user }}/.ssh/authorized_keys
