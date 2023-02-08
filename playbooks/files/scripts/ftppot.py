@@ -17,7 +17,7 @@ finally:
 ######## Global Variables ########
 USR = "ftpuser"
 PWD = "ftp"
-PORT = 4444
+PORT = 21
 linPath = "/home/ftp"
 
 ######## Helper Function ########

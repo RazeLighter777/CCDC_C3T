@@ -2,13 +2,6 @@
   hosts: linux
   become: true
   tasks: 
-    - name: Testing Port
-      ufw:
-        rule: allow
-        port: 4444
-        proto: tcp
-        state: enabled 
-      when: "'honeypot_servers' in group_names"
     - name: Enable ssh on firewall
       ufw:
         rule: allow
@@ -50,6 +43,21 @@
         - 9200
         - 443
       when: "'wazuh_servers' in group_names"
+    - name: Enable ftp active and passive port range
+      ufw:
+        rule: allow
+        port: "{{ item }}"
+        proto: tcp
+        state: enabled
+      when: "'honeypot_servers' in group_names"
+      with_items:
+        - 21
+        - 4445
+        - 4446
+        - 4447
+        - 4448
+        - 4449
+        - 4450
     - name: Open tcp 9300-9400 on wazuh_servers
       ufw:
         rule: allow
