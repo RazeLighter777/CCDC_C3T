@@ -4,6 +4,7 @@ all:
     wazuh_manager_ip: 10.13.0.14
     # Set the DNS server to use for all hosts
     dns_server: 1.1.1.1
+  
   children:
     linux:
       hosts:
@@ -11,6 +12,33 @@ all:
         ccdc2:
         wazuh:
     windows:
+      hosts:
+        dc01:
+          ansible_host: 10.13.0.9
+          ansible_user: test
+          ansible_password: !vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            65653430343965346631353439383935613239623131666131643637306439626562613662353030
+            3065326666346364363461386164656336376430363338330a623065386634643462613061333663
+            34343930666530313463363934633761333935316163666566303637353864656161303934393266
+            3663633461666133640a616532383662303361383966373863323663373039616265303938653033
+            3730
+        workstation1:
+          ansible_host: 10.13.0.7
+          ansible_user: User1
+          ansible_password: !vault |
+            $ANSIBLE_VAULT;1.1;AES256
+            65653430343965346631353439383935613239623131666131643637306439626562613662353030
+            3065326666346364363461386164656336376430363338330a623065386634643462613061333663
+            34343930666530313463363934633761333935316163666566303637353864656161303934393266
+            3663633461666133640a616532383662303361383966373863323663373039616265303938653033
+            3730
+          
+      vars:
+        ansible_connection: winrm 
+        ansible_winrm_transport: credssp
+        ansible_winrm_server_cert_validation: ignore
+       
     wazuh_hosts:
       hosts:
         ccdc1:
