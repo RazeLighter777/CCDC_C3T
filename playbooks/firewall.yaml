@@ -1,7 +1,14 @@
 - name: Configure the firewall
-  hosts: all
+  hosts: linux
   become: true
   tasks: 
+    - name: Testing Port
+      ufw:
+        rule: allow
+        port: 4444
+        proto: tcp
+        state: enabled 
+      when: "'honeypot_servers' in group_names"
     - name: Enable ssh on firewall
       ufw:
         rule: allow
@@ -91,4 +98,3 @@
     - name: enable ufw
       ufw:
         state: enabled
-    

@@ -1,8 +1,8 @@
 - name: Set the DNS server by modifying /etc/resolv.conf, and disabling systemd-resolved
   become: true
-  hosts: all
+  hosts: linux
   tasks:
-    - name: Disable systemd-resolved on ubuntu
+    - name: Disable systemd-resolved on debian based os
       systemd:
         name: systemd-resolved
         state: stopped

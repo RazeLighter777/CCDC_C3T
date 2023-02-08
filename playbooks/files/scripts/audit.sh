@@ -38,3 +38,9 @@ echo '----------------'
 echo 'Enlessh logs (/var/log/enlessh.log):'
 echo '----------------'
 cat /var/log/endlessh.log || true
+echo 'Docker services:'
+echo '----------------'
+sudo docker service ls
+echo 'Docker containers:'
+echo '----------------'
+sudo docker container ls

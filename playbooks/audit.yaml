@@ -1,5 +1,5 @@
 - name: Run the system information audit
-  hosts: all
+  hosts: linux
   become: true
   tasks:
     - name: Copy audit.sh to remote host

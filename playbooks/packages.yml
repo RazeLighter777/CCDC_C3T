@@ -1,28 +1,32 @@
-- name: ubuntu-packages
-  hosts: ubuntu
+- name: debian based packages
+  hosts: linux
   become: true
   tasks:
-    - name: Install list of packages on ubuntu
+    - name: Install list of packages on debian based os
       apt:
         name: ["vim", "htop", "screen", "firejail", "python3", "python3-pip", "net-tools", "bash-completion"]
         state: present
-- name: centos-packages
-  hosts: centos
+      when: ansible_os_family == "Debian"
+- name: RHEL based packages
+  hosts: linux
   become: true
   tasks:
-    - name: Install list of packages on centos
+    - name: Install list of packages on RHEL based OS
       yum:
         name: ["vim", "htop", "screen", "python3", "python3-pip", "net-tools","bash-completion"]
         state: present
+      when: ansible_os_family == "RedHat"
   pre_tasks:
     - name: Install epel-release
       yum:
         name: epel-release
         state: present
+      when: ansible_os_family == "RedHat"
     - name: yum update
       yum:
         name: "*"
         state: latest
+      when: ansible_os_family == "RedHat"
 - name: Update all packages
   hosts: all
   become: true

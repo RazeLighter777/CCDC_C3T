@@ -5,32 +5,16 @@ all:
     # Set the DNS server to use for all hosts
     dns_server: 1.1.1.1
   children:
+    linux:
+      hosts:
+        ccdc1:
+        ccdc2:
+        wazuh:
+    windows:
     wazuh_hosts:
       hosts:
         ccdc1:
         ccdc2:
-    #ubuntu/debian hosts
-    ubuntu:
-      hosts:
-        ccdc1:
-          ansible_host: ccdc1
-        ccdc2:
-          ansible_host: ccdc2
-    #centos,rhel,rocky, amazon linux hosts.
-    centos: 
-      hosts:
-        wazuh:
-          ansible_host: wazuh
-    #windows hosts
-    windows:
-      hosts:
-        user1:
-         ansible_host: <redacted>
-         ansible_user: <redacted>
-         ansible_password: <redacted>
-         ansible_connection: winrm
-         ansible_winrm_transport: credssp
-         ansible_winrm_server_cert_validation: ignore
     # any servers that need port 80/443 open
     web_servers:
       hosts:
