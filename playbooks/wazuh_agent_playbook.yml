@@ -1,23 +1,19 @@
-tasks: 
-- name: Install wazuh_agent
+- name: Deploy and configure wazuh agents
   hosts: wazuh_agents
-  become: true
+  become: true 
   roles:
       - { role: libyanspider.wazuh_agent_role, wazuh_manager_ip: 10.13.0.14, wazuh_agent_group: "default" }
-- name: wazuh_agents
-  hosts: wazuh_agents
-  become: true
-  copy:
-    src: /wazuh/ossec.conf
-    dest: /var/ossec/etc/ossec.conf
-    owner: root
-    group: root
-    mode: 0644
+  tasks:
+    - name: wazuh_agents
+    copy:
+      src: /wazuh/ossec.conf
+      dest: /var/ossec/etc/ossec.conf
+      owner: root
+      group: root
+      mode: 0644
   
-- name: Restart configured agents
-  hosts: wazuh_agents
-  become: true
-  service:
-    name: wazuh-agent
-    state: restarted
+      - name: Restart configured agents
+      service:
+      name: wazuh-agent
+      state: restarted
       
