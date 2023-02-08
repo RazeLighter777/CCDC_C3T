@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 ######## Imports ########
-import os, socket
+import os, socket, logging
 
 try:
   from pyftpdlib.servers import FTPServer
@@ -37,6 +37,8 @@ def runFTPServer() -> None:
   # Define a customized banner (string returned when client connects)
   handler.banner = "pyftpdlib based ftpd ready."
   
+  logging.basicConfig(filename='/var/log/ftppot.log', level=logging.INFO)
+
   server = FTPServer(('', PORT), handler)
 
   server.max_cons = 256
