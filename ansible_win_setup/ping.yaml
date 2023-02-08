@@ -1,4 +1,4 @@
-- name: bruh
+- name: ping
   hosts: windows
   tasks: 
   - name: example

@@ -1,0 +1,9 @@
+[Unit]
+Description=Python http honeypot
+After=multi-user.target
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/bin/python3 /opt/httppot.py
+[Install]
+WantedBy=multi-user.target

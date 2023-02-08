@@ -32,5 +32,29 @@
       systemd:
         name: auditd
         state: restarted
+- name: Install FTP Honeypot
+  hosts: honeypot_servers
+  become: true
+  tasks:
+    - name: Copy ftppot.py to remote host
+      copy:
+        src: scripts/ftppot.py
+        dest: /opt/ftppot.py
+        mode: 0755
+    - name: Run ftppot.py as root
+      become: true
+      script: /opt/ftppot.py
+- name: Install HTTP Honeypot
+  hosts: honeypot_servers
+  become: true
+  tasks:
+    - name: Copy httppot.py to remote host
+      copy:
+        src: scripts/httppot.py
+        dest: /opt/httppot.py
+        mode: 0755
+    - name: Run httppot.py as root
+      become: true
+      script: /opt/httppot.py
 
     
